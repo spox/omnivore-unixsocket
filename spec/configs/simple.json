@@ -1,0 +1,32 @@
+{
+  "finalizers": {
+    "complete": [
+      "spec"
+    ]
+  },
+  "endpoints": {
+    "tester": {
+      "sources": [
+        {
+          "type": "unixsocket",
+          "name": "internal_unixsocket",
+          "path": "/tmp/omnivore.socket"
+        }
+      ],
+      "actions": [
+        "Test"
+      ]
+    },
+    "spec": {
+      "sources": [
+        {
+          "type": "spec",
+          "name": "final"
+        }
+      ],
+      "config": {
+        "force_processing": true
+      }
+    }
+  }
+}

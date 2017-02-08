@@ -11,7 +11,7 @@ describe Omnivore::Source::Unixsocket do
     app = Omnivore::Application::Pathed.new(config)
     endpoint = app.endpoints["tester"]
     source = endpoint.sources.first
-    final = app.endpoints["spec"].sources.first as Omnivore::Source::Spec
+    final = app.endpoints["spec"].sources.first.as(Omnivore::Source::Spec)
     app.consume!
     spawn do
       100.times do

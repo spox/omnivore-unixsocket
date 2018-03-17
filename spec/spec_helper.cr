@@ -5,7 +5,7 @@ ENV["OMNIVORE_SPEC"] = "true"
 require "../src/omnivore-unixsocket"
 
 # Keep logger silent by default
-unless(ENV["DEBUG"]?)
+unless (ENV["DEBUG"]?)
   Omnivore.configure_logger({"log_path" => "/dev/null"} of String => String, {} of String => String)
 else
   Omnivore.logger.level = Logger::DEBUG

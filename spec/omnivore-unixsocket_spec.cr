@@ -1,7 +1,6 @@
 require "./spec_helper"
 
 describe Omnivore::Source::Unixsocket do
-
   it "should add unixsocket source to available sources" do
     Omnivore::Source.sources["unixsocket"]?.should_not be_nil
   end
@@ -19,15 +18,13 @@ describe Omnivore::Source::Unixsocket do
         endpoint.transmit(message)
       end
     end
-    99.times{ final.spec_mailbox.receive }
+    99.times { final.spec_mailbox.receive }
     message = final.spec_mailbox.receive
     app.halt!
-    if(message.nil?)
+    if (message.nil?)
       fail "Expected message not received"
     else
       message.get(:data, :test, :value, type: :string).should eq("testing")
     end
-
   end
-
 end

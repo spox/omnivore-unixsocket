@@ -1,12 +1,11 @@
 module Omnivore
   class Source
     class Unixsocket < Internal
-
       @socket : String?
       @connection : UNIXSocket?
       @server : UNIXServer?
       @collecting : Bool = false
-      @connections = [] of IO::FileDescriptor
+      @connections = [] of UNIXSocket
 
       # Setup the source
       def setup
@@ -38,7 +37,7 @@ module Omnivore
       # @return [UNIXSocket]
       def connection
         i_connection = @connection
-        if(i_connection.nil?)
+        if (i_connection.nil?)
           i_connection = @connection = UNIXSocket.new(@socket.to_s)
         end
         i_connection
@@ -47,7 +46,7 @@ module Omnivore
       # @return [UNIXServer]
       def server
         srv = @server
-        if(srv.nil?)
+        if (srv.nil?)
           error "Server is not properly setup for receiving messages"
           raise "Server is not configured correctly!"
         else
@@ -71,15 +70,15 @@ module Omnivore
       #
       # @param sock [IO]
       def handle_connection(sock)
-        unless(@connections.includes?(sock))
+        unless (@connections.includes?(sock))
           debug "Registered new client socket connection `#{sock}`"
           @connections << sock
           spawn do
             enabled = true
-            while(@collecting && enabled)
+            while (@collecting && enabled)
               begin
                 line = sock.gets
-                if(line)
+                if (line)
                   debug "Received new input from client socket `#{sock}`: #{line.inspect}"
                   source_mailbox.send(line.strip)
                 end
@@ -97,14 +96,14 @@ module Omnivore
 
       # Collect messages from the UNIXServer
       def collect_messages!
-        unless(@collecting)
+        unless (@collecting)
           @collecting = true
           spawn do
             begin
-              while(@collecting)
+              while (@collecting)
                 debug "Waiting for new client socket connection"
                 sock = server.accept
-                spawn{ handle_connection(sock) }
+                spawn { handle_connection(sock) }
               end
               debug "Message collection has been halted"
             rescue e
@@ -115,7 +114,6 @@ module Omnivore
           warn "Already collecting messages from socket server"
         end
       end
-
     end
   end
 end
